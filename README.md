@@ -11,7 +11,7 @@
 
 Arquix is a workflow configuration manager for Arch-based GNU/Linux distributions. It allows you to manage configuration files, install programs, organize files in directories, and run additional commands. The configuration file is written is Python so you get all the benefits of a powerful scripting language. 
 
-Arquix is meant to be used as a "workflow reproducer" and was created so anyone can replicate other people's workflow through a single `config.py` file. You can find my own `config.py` [here](config/config.py). It's recommended to be used after a base install.
+Arquix is meant to be used as a "workflow reproducer" and was created so anyone can replicate other people's workflow through a single `config.py` file. You can find my own `config.py` [here](config/config.py). Arquix can also be used as a **post-install script.**
 
 ## Requirements
 
@@ -35,11 +35,11 @@ You can uninstall Arquix by running:
 make uninstall
 ```
 
-## Overview
+## Usage
 
 Arquix's configuration file is written in Python as `config.py`. This file can be placed anywhere you want in your system, although it's recommended to keep it in `~/.config/arquix/config.py`. Everytime you run `python config.py`, the script will do its magic.
 
-The configuration file is really simple, so the source code below should be self-explanatory.
+It's fairly easy to write the configuration file, so the source code below should be self-explanatory.
 
 ```py
 from arquix.arquix import Directory, Dotfile, DotfileDir, Operation, Arquix
@@ -48,37 +48,41 @@ from arquix.shellcommand import ShellCommand
 
 # Home directory
 home_dir = "/home/miguel"
-# We need this because some packages have different names on Artix Linux.
+# If True, it assumes we are running this script on Artix Linux. This is needed because some packages have different names on Artix Linux.
 on_artix = False
 # My github profile. 
-# Your profile should have at minimum a repo for dotfiles.
+# Your profile should have at minimum a repo for your dotfiles.
 github_profile = "https://github.com/miguelnto"
 
-# Create the Arquix object. The directory name for dotfiles should be the same as the repo name. I recommend using just "dotfiles".
+# Create the Arquix object. The directory name for dotfiles should be the same as the repo name. I recommend naming it "dotfiles".
 conf = Arquix(home_dir=home_dir,
               dotfile_dir=DotfileDir(directory=f"{home_dir}/dotfiles", 
               repo_link=github_profile+"/dotfiles")
 )
 
-# zsh configuration
+# zsh configuration file (Dotfile) 
+# the first argument is the original location of the file (inside the dotfiles directory), and the second argument is where the file should be placed.
 zshrc = Dotfile(conf.dotfile_dir.path + "/zshrc", conf.home_dir + "/.zshrc")
 
-# sblocks configuration
+# directory path for the sblocks configuration file
 sblocks_dir = Directory(conf.home_dir + "/.config/sblocks", False)
+# sblocks configuration file
 sblocks_config = Dotfile(conf.dotfile_dir.path + "/sblocks/config.toml", sblocks_dir.src + "/config.toml")
 
-# Neovim configuration
+# directory path for the neovim configuration file
 initvim_dir = Directory(conf.home_dir + "/.config/nvim", False)
+# neovim configuration file
 initvim = Dotfile(conf.dotfile_dir.path + "/init.vim", initvim_dir.src + "/init.vim")
 
-# Font configuration
+# directory path for the font configuration file
 font_dir = Directory("/etc/fonts", True)
+@ font configuration file
 fontconf = Dotfile(conf.dotfile_dir.path + "/fonts/local.conf", font_dir.src + "/local.conf")
 
-# Keyboard configuration
+# keyboard configuration file
 keyboard_conf = Dotfile(conf.dotfile_dir.path + "/vconsole.conf", "/etc/vconsole.conf")
 
-# Xinitrc
+# xinitrc
 xinitrc = Dotfile(conf.dotfile_dir.path + "/xinitrc", conf.home_dir + "/.xinitrc")
 
 # Dotfiles to organize
@@ -91,7 +95,7 @@ conf.dotfiles = [
                  xinitrc
                  ]
 
-# Projects directory. It doesn't need root permissions.
+# I keep my projects inside this "Projects" directory. It doesn't need root permissions.
 projects_dir = Directory(src=conf.home_dir + "/dev/projects", root_access=False)
 
 # Directories to create
@@ -104,7 +108,6 @@ conf.create_dirs = [
 
 # Pamixer, needed for sblocks.
 pamixer = "pulsemixer" if on_artix else "pamixer"
-
 app_launcher = "dmenu"
 
 # Arch packages to install
@@ -115,6 +118,7 @@ conf.aur_pkgs = ["brave-bin", "pfetch"]
 # Programs to install from github.
 ndwm = GitPkg(name="ndwm", link=github_profile + "/ndwm", install_dir = projects_dir.src,) 
 libtoml = GitPkg(name="libtoml", link=github_profile + "/libtoml", install_dir = projects_dir.src)
+# By default, sah is the program that Arquix uses to install AUR packages.
 sah = GitPkg(name="sah", link=github_profile + "/sah", install_dir = projects_dir.src)
 sblocks = GitPkg(name="sblocks", link=github_profile + "/sblocks", install_dir = projects_dir.src)
 st = GitPkg(name="st", link=github_profile + "/st", install_dir = projects_dir.src)
@@ -164,7 +168,7 @@ conf.main()
   - You can pretty much adapt Arquix to work on any distro by placing the right files in the right places, change the installation process for the packages, etc. Having said that, I do plan on adapting Arquix for: **Void Linux, OpenBSD, NetBSD, and maybe Haiku.**
 
 - Where's your configuration file?
-  - [Here](config/config.py). Before using it, remember to change the home directory path and the value of `on_artix` accordingly.
+  - [Here](config/config.py). Before using it, remember to change the home directory path and the value of `on_artix` accordingly. I recommend using it as a post-install script.
 
 - Something is not working.
   - Arquix runs a lot of commands in sequence and prints their output so you will be able to read and figure out what's wrong.
@@ -173,3 +177,5 @@ conf.main()
 ## Motivation
 
 I tried out NixOS and absolutely disliked it. I can see how NixOS can benefit some people but it's absolutely not for me, at least not for "daily-drive" use. You can pretty much acheive a lot of functionality from Nix or NixOS by creating separate scripts and programs that works very well when interacting with each other (the UNIX philosophy), without the need of abstractions, opinionated tooling, tons of documentation, etc. One thing I liked about NixOS was the reproducibility aspect of it. I wanted something like that for Arch Linux, so I created Arquix. Obviously it's absurd to compare the reproducibility capacities between NixOS and Arquix, but Arquix gets the job done and is a lot more predictable in my opinion. I'm not sure if other people would find this project useful, but I hope so.
+
+## Video

@@ -3,12 +3,12 @@ from arquix.packages import GitPkg
 from arquix.shellcommand import ShellCommand
 
 home_dir = "/home/miguel"
-on_artix = False
+on_artix = True
 github_profile = "https://github.com/miguelnto"
 
 conf = Arquix(home_dir=home_dir,
               dotfile_dir=DotfileDir(directory=f"{home_dir}/dotfiles", repo_link=github_profile+"/dotfiles")
-)
+) 
 
 # zsh configuration
 zshrc = Dotfile(conf.dotfile_dir.path + "/zshrc", conf.home_dir + "/.zshrc")
@@ -25,6 +25,10 @@ initvim = Dotfile(conf.dotfile_dir.path + "/init.vim", initvim_dir.src + "/init.
 font_dir = Directory("/etc/fonts", True)
 fontconf = Dotfile(conf.dotfile_dir.path + "/fonts/local.conf", font_dir.src + "/local.conf")
 
+# Newsboat configuration
+newsboat_dir = Directory(conf.home_dir + "/.newsboat", root_access = False)
+newsboatconf = Dotfile(conf.dotfile_dir.path + "/newsboat/config", newsboat_dir.src + "/config")
+
 # Keyboard configuration
 keyboard_conf = Dotfile(conf.dotfile_dir.path + "/vconsole.conf", "/etc/vconsole.conf")
 
@@ -38,7 +42,8 @@ conf.dotfiles = [
                  initvim,
                  fontconf,
                  keyboard_conf,
-                 xinitrc
+                 xinitrc,
+                 newsboatconf,
                  ]
 
 # Projects directory
@@ -49,7 +54,8 @@ conf.create_dirs = [
                     sblocks_dir, 
                     initvim_dir, 
                     font_dir,
-                    projects_dir
+                    projects_dir,
+                    newsboat_dir,
                     ]
 
 pamixer = "pulsemixer" if on_artix else "pamixer"
@@ -74,7 +80,7 @@ conf.git_pkgs = [
                  st,
                 ] 
 
-set_zsh_as_default_shell = ShellCommand(cmd=["chsh","-s","/usr/bin/zsh"])
+set_zsh_as_default_shell = ShellCommand(cmd=["chsh","-s","$(which zsh)"])
 
 conf.additional_commands = [
                             set_zsh_as_default_shell,
