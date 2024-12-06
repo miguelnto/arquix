@@ -9,11 +9,11 @@
 
 </div>
 
-Arquix is a workflow configuration manager for Arch-based GNU/Linux distributions. It allows you to manage configuration files, install programs, organize files in directories, and run additional commands. The configuration file is written is Python so you get all the benefits of a powerful scripting language. 
+Arquix is an extensible configuration manager and post-install script for Arch-based GNU/Linux distributions. It allows you to manage configuration files, install programs, organize files in directories, and run additional commands. The configuration file is written is Python so you get all the benefits of a powerful scripting language. 
 
 Arquix is meant to be used as a "workflow reproducer" and was created so anyone can replicate other people's workflow through a single `config.py` file. You can find my own `config.py` [here](config/config.py). Arquix can also be used as a **post-install script.**
 
-## Requirements
+## Dependencies
 
 - python
 - python-pip
