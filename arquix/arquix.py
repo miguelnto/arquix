@@ -34,7 +34,7 @@ class DotfileDir:
     def git_clone(self) -> None:
         if self.dir_exists:
             return
-        git_cmd = ["git", "clone", self.repo_link, self.path]
+        git_cmd = ["sudo", "git", "clone", self.repo_link, self.path]
         subprocess.run(git_cmd, capture_output=False, check=True)
 
 class Operation(Enum):

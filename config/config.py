@@ -2,7 +2,9 @@ from arquix.arquix import Directory, Dotfile, DotfileDir, Operation, Arquix
 from arquix.packages import GitPkg
 from arquix.shellcommand import ShellCommand
 
+# CHANGE TO YOUR HOME DIRECTORY PATH
 home_dir = "/home/miguel"
+# SPECIFY IF YOU ARE USING ARTIX OR NOT
 on_artix = True
 github_profile = "https://github.com/miguelnto"
 
