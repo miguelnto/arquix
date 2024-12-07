@@ -82,7 +82,7 @@ conf.git_pkgs = [
                  st,
                 ] 
 
-set_zsh_as_default_shell = ShellCommand(cmd=["chsh","-s","$(which zsh)"])
+set_zsh_as_default_shell = ShellCommand(cmd=["chsh","-s","/usr/bin/zsh"])
 
 conf.additional_commands = [
                             set_zsh_as_default_shell,
