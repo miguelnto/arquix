@@ -62,7 +62,7 @@ conf.create_dirs = [
 
 pamixer = "pulsemixer" if on_artix else "pamixer"
 
-conf.arch_pkgs = ["git", "python", "base-devel", "xorg", "xorg-xinit", "neovim", "brightnessctl", "neofetch", "alsa-utils", "pcmanfm", pamixer, "zsh-syntax-highlighting", "zsh", "ripgrep", "noto-fonts", "dmenu"]
+conf.arch_pkgs = ["git", "python", "base-devel", "xorg", "xorg-xinit", "neovim", "brightnessctl", "neofetch", "alsa-utils", "pcmanfm", pamixer, "zsh-syntax-highlighting", "zsh", "ripgrep", "noto-fonts", "dmenu", "newsboat"]
 conf.aur_pkgs = ["brave-bin", "pfetch"]
 
 
