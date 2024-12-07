@@ -6,4 +6,7 @@ install:
 uninstall:
 	pip uninstall --break-system-packages arquix
 
+run: install
+	python config/sla.py
+
 .PHONY: install uninstall

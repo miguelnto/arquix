@@ -27,6 +27,15 @@ Arquix is just a Python package and can be installed as any other Python package
 make install
 ```
 
+If you want to use Arquix as a post-install script after you installed an Arch-based distro, run (as root, if needed):
+
+```
+make run
+```
+
+This will install Arquix and apply [my configuration.](config/config.py)
+
+
 ### Uninstall
 
 You can uninstall Arquix by running:
